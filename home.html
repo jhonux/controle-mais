@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="css/home.css">
+    <link rel="stylesheet" href="css/variaveis.css">
+    <title>HOME</title>
+</head>
+
+<body>
+    <header class="header">
+        <div class="menu-icon"></div>
+        <div class="logo">
+            <img src="images/logo.png" alt="">
+
+        </div>
+        <div class="profile">
+            <img src="images/avatar.svg" alt="Avatar">
+        </div>
+    </header>
+
+    <div class="container">
+        <h1 class="title">Dashboard</h1>
+
+       <a href="index.html" class="button desktop-only">Inserir nova transação</a>
+
+        <button class="mobile-button mobile-only">+</button>
+
+        <div class="main-content">
+        
+            <div class="left-column">
+                <div class="chart-placeholder">
+                    <canvas id="myChart"></canvas>
+                </div>
+            </div>
+
+            <div class="right-column">
+                <div class="top-graph">
+                    <table id="tabela-transacoes">
+                        <thead>
+                            <tr>
+                                <th colspan="4">Principais gastos do mês</th>
+                            </tr>
+                            <tr>
+                                <th>Data</th>
+                                <th>Descrição</th>
+                                <th>Categoria</th>
+                                <th>Valor</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                           
+                        </tbody>
+                    </table>
+
+                    <table>
+                        <thead>
+                            <tr>
+                                <th colspan="4">Transações recentes</th>
+                            </tr>
+                            <tr>
+                                <th>Data</th>
+                                <th>Descrição</th>
+                                <th>Categoria</th>
+                                <th>Valor</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>30/05/2025</td>
+                                <td>Supermercado</td>
+                                <td>Alimentação</td>
+                                <td>R$ 150,00</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="bottom-graph">
+
+                    <table>
+                        <thead>
+                            <tr>
+                                <th colspan="4">Metas financeiras</th>
+                            </tr>
+                            <tr>
+                                <th>Item</th>
+                                <th>Descrição</th>
+                                <th>Categoria</th>
+                                <th>Valor</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>30/05/2025</td>
+                                <td>Supermercado</td>
+                                <td>Alimentação</td>
+                                <td>R$ 150,00</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Rodapé -->
+    <footer class="footer">
+        Esta é a página de dashboard - Controle+
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="js/home.js"></script>
+</body>
+
+</html>

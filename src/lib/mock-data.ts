@@ -1,6 +1,6 @@
 export interface Categoria {
-  id: string; // Um ID único para cada categoria
-  nome: string; // O nome da categoria
+  id: string; 
+  nome: string; 
 }
 
 export const mockCategorias: Categoria[] = [
@@ -11,13 +11,13 @@ export const mockCategorias: Categoria[] = [
   { id: 'cat-lazer', nome: 'Lazer' },
   { id: 'cat-casa', nome: 'Casa' },
   { id: 'cat-vestuario', nome: 'Vestuário' },
-  { id: 'cat-salario', nome: 'Salário' }, // Adicionando uma para receita, se for o caso
+  { id: 'cat-salario', nome: 'Salário' }, 
   { id: 'cat-outros', nome: 'Outros' },
 ];
 
 export interface FormaPagamento {
-  id: string; // Um ID único para cada forma de pagamento
-  nome: string; // O nome da forma de pagamento
+  id: string;
+  nome: string; 
 }
 
 export const mockPagamentos: FormaPagamento[] = [

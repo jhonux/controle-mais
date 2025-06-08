@@ -42,7 +42,7 @@ export function CategorySelect({
         rules={{ required: required ? "Campo obrigatório" : false }}
         render={({ field }) => (
           <Select onValueChange={field.onChange} value={field.value || ""} defaultValue="">
-            <SelectTrigger className="w-full border border-gray-300 rounded-md px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition">
+            <SelectTrigger className="w-full border border-gray-300 rounded-md px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
               <SelectValue placeholder={placeholder} />
             </SelectTrigger>
             <SelectContent>

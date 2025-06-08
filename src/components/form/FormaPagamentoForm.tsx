@@ -47,7 +47,7 @@ export default function FormaPgtoModalForm({ onSave }: FormaPgtoModalFormProps) 
             </DialogTrigger>
             <DialogContent>
                 <DialogHeader>
-                    <DialogTitle>Nova Categoria</DialogTitle>
+                    <DialogTitle>Nova Forma de Pagamento</DialogTitle>
                 </DialogHeader>
                 <div className="space-y-4">
                     <div>

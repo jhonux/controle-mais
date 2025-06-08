@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useFormContext, Controller } from 'react-hook-form';
 import { format } from 'date-fns';
 import { Calendar as CalendarIcon } from 'lucide-react';
@@ -24,6 +25,7 @@ export function FormDatePicker({ name, label }: FormDatePickerProps) {
     formState: { errors },
   } = useFormContext();
   const error = errors[name]?.message;
+  const [isCalendarOpen, setCalendarOpen] = useState(false);
 
   return (
     <div className="space-y-2">
@@ -34,13 +36,13 @@ export function FormDatePicker({ name, label }: FormDatePickerProps) {
         name={name}
         control={control}
         render={({ field }) => (
-          <Popover>
-            <PopoverTrigger asChild>
+          <Popover open={isCalendarOpen} onOpenChange={setCalendarOpen}>
+            <PopoverTrigger className='focus:ring-blue-500' asChild>
               <Button
                 id={name}
                 variant="outline"
                 className={cn(
-                  'w-full justify-start text-left font-normal',
+                  'w-full justify-start text-left font-normal ',
                   !field.value && 'text-muted-foreground'
                 )}
               >
@@ -52,12 +54,15 @@ export function FormDatePicker({ name, label }: FormDatePickerProps) {
                 )}
               </Button>
             </PopoverTrigger>
-            <PopoverContent className="w-auto p-0">
+            <PopoverContent className="w-auto p-0" align='start'>
               <Calendar
                 mode="single"
                 selected={field.value}
-                onSelect={field.onChange}
-                initialFocus
+                onSelect={(date) => {
+                  field.onChange(date);
+                  setCalendarOpen(false);
+                }}
+                className="pointer-events-auto"
               />
             </PopoverContent>
           </Popover>

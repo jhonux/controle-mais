@@ -7,7 +7,6 @@ import { z } from 'zod';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
-import { CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 
 import { CategorySelect } from '@/components/dash/CategorySelect';
 import  CategoriaModalForm  from '@/components/form/CategoriaModalForm';
@@ -58,7 +57,7 @@ export default function NovaTransacaoForm() {
   };
 
   return (
-    <div className="mx-auto max-w-xl rounded-xl bg-white p-8 shadow-lg">
+    <div className="mx-auto max-w-2xl rounded-xl bg-white p-8 shadow-lg">
         
           <div className='mb-6'>
           <h1 className="text-2xl font-bold">Nova transação</h1>

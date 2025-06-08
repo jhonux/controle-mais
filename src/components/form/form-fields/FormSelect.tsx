@@ -24,7 +24,7 @@ export function FormSelect({ name, label, placeholder, options }: FormSelectProp
   const error = errors[name]?.message;
 
   return (
-    <div className="space-y-2">
+    <div className="w-full space-y-2">
       <Label htmlFor={name} className={error ? 'text-red-500' : ''}>
         {label}
       </Label>
@@ -33,7 +33,7 @@ export function FormSelect({ name, label, placeholder, options }: FormSelectProp
         control={control}
         render={({ field }) => (
           <Select onValueChange={field.onChange} defaultValue={field.value}>
-            <SelectTrigger id={name}>
+            <SelectTrigger id={name} className='w-full focus:ring-blue-500'>
               <SelectValue placeholder={placeholder} />
             </SelectTrigger>
             <SelectContent>

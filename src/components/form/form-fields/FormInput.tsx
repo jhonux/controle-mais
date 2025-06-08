@@ -32,3 +32,4 @@ export function FormInput({ name, label, ...props }: FormInputProps) {
     </div>
   );
 }
+

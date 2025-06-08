@@ -1,6 +1,7 @@
 'use client';
 import React from 'react';
 import { useForm, FormProvider } from 'react-hook-form';
+import { useRouter } from 'next/navigation';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 
@@ -49,12 +50,18 @@ export default function NovaTransacaoForm() {
   });
 
   const { handleSubmit, reset } = methods;
+  const router = useRouter();
 
   const onSubmit = (data: FormData) => {
    
     console.log('Form data:', data);
 
   };
+
+  const handleCancelClick = () => {
+    reset();
+    router.push('/');
+  }
 
   return (
     <div className="mx-auto max-w-2xl rounded-xl bg-white p-8 shadow-lg">
@@ -120,7 +127,7 @@ export default function NovaTransacaoForm() {
           </div>
 
           <div className="flex justify-end gap-4">
-            <Button type="button" variant="outline" onClick={() => reset()}>
+            <Button type="button" variant="outline" onClick={handleCancelClick}>
               Cancelar
             </Button>
             <Button type="submit">Salvar</Button>

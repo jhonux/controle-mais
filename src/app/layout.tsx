@@ -32,8 +32,8 @@ export default function RootLayout({
         </header>
 
         <div className="flex min-h-screen">
-          <main className="flex-1 md:ml-64 p-6 bg-gray-100">{children}
-
+          <main className="flex-1 md:ml-64 bg-gray-100">
+            {children}
           </main>
         </div>
         <footer className="text-black text-xs text-center p-2">

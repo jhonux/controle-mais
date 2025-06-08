@@ -1,28 +1,53 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 
-export default function NovaTransacaoPage() {
+interface Categoria {
+  id_categoria:  number;
+  fk_id_categoria: number;
+  nom_categoria: string;
+  des_preset:    "Y" | "N";
+}
+
+export default async function Page() {
+  const userId = 1;
+  const url = `https://apex.oracle.com/pls/apex/controleplus/controle/categoria?P_ID_USUARIO=${userId}`;
+
+  const res = await fetch(url, {
+    cache: "no-store",
+    headers: { Accept: "application/json" },
+  });
+
+  if (!res.ok) {
+    throw new Error(`Falha ao carregar categorias: ${res.status}`);
+  }
+
+  const raw = await res.json();
+
+  let items: Categoria[];
+  if (Array.isArray(raw)) {
+    items = raw;
+  } else if (raw && Array.isArray((raw as any).items)) {
+    items = (raw as any).items;
+  } else {
+    throw new Error("Formato de resposta inválido: esperado array ou { items: [...] }");
+  }
+
   return (
-    <main className="min-h-screen p-6 bg-gray-100">
-     <div className="space-y-6">
-        <div>
-          <h1 className="text-3xl font-bold text-gray-900">Categorias</h1>
-          <p className="text-muted-foreground">Gerencie suas categorias de transações</p>
-        </div>
-
-        <Card className="card-hover">
-          <CardHeader>
-            <CardTitle>Suas Categorias</CardTitle>
-            <CardDescription>
-              Visualize e gerencie todas as suas categorias
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <p className="text-sm text-muted-foreground">
-              Em desenvolvimento...
-            </p>
-          </CardContent>
-        </Card>
-      </div>
-    </main>
+    <Card>
+      <CardHeader>
+        <CardTitle>Categorias</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <ul className="list-disc pl-6 space-y-1">
+          {items.map((cat) => (
+            <li key={cat.id_categoria}>
+              <span className="font-semibold">{cat.nom_categoria}</span>
+              {cat.des_preset === "Y" && (
+                <span className="ml-2 italic text-gray-500">(preset)</span>
+              )}
+            </li>
+          ))}
+        </ul>
+      </CardContent>
+    </Card>
   );
 }

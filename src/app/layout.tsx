@@ -1,7 +1,7 @@
 
-import Link from "next/link";
 import "./globals.css";
-import  Sidebar  from "@/components/sidebar/SideBar";
+import Image from "next/image";
+import Sidebar from "@/components/sidebar/SideBar";
 
 
 export const metadata = {
@@ -14,14 +14,20 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-   return (
+  return (
     <html lang="pt-BR">
       <body className="flex flex-col min-h-screen">
-         
-         <Sidebar />
-        <header className="text-white relative py-4 px-4 flex items-center justify-center header-layout ">      
+
+        <Sidebar />
+        <header className="text-white relative py-4 px-4 flex items-center justify-center header-layout ">
           <div className="absolute right-4 inset-y-0 flex items-center">
-            <img src="/images/avatar.svg" alt="Avatar" className="h-8 w-8 rounded-full "/>
+            <Image
+              src="/images/avatar.svg"
+              alt="Avatar"
+              width={32}
+              height={32}
+              className="h-8 w-8 rounded-full"
+            />
           </div>
         </header>
 
@@ -30,10 +36,10 @@ export default function RootLayout({
 
           </main>
         </div>
-          <footer className="text-black text-xs text-center p-2">
-            Este aplicativo é fictício e não possui qualquer vínculo com instituição financeira real.
-          </footer>
-     
+        <footer className="text-black text-xs text-center p-2">
+          Este aplicativo é fictício e não possui qualquer vínculo com instituição financeira real.
+        </footer>
+
       </body>
     </html>
   );

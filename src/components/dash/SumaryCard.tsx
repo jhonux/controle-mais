@@ -9,7 +9,7 @@ interface SummaryCardProps {
   trend?: string;
 }
 
-export default function SummaryCard({ title, value, icon, trend }: SummaryCardProps) {
+export default function SummaryCard({ title, value, icon }: SummaryCardProps) {
   return (
     <div className="flex flex-col h-full bg-white p-4 rounded-lg shadow-md transition-transform hover:-translate-y-1">
       <div className="flex justify-between items-start">

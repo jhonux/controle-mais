@@ -1,36 +1,52 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Controle +
 
-## Getting Started
+**Controle +** é uma aplicação de **controle financeiro pessoal** desenvolvido com **Next.js** e **Tailwind CSS**, com o objetivo de oferecer uma experiência moderna, intuitiva e responsiva para quem deseja organizar melhor suas finanças.
 
-First, run the development server:
+## 💡 Sobre o projeto
+
+A ideia do **Controle +** surgiu da necessidade de ter um sistema simples, mas poderoso, para registrar entradas e saídas de dinheiro, acompanhar os principais gastos e visualizar gráficos de desempenho ao longo do ano. Ao invés de depender de planilhas complexas ou aplicativos genéricos, criamos uma solução pensada sob medida — com foco em usabilidade e clareza.
+
+O projeto foi desenhado com atenção à interface e à experiência do usuário, com layout responsivo que se adapta tanto a desktops quanto a dispositivos móveis.
+
+---
+
+## 🔧 Tecnologias utilizadas
+
+- **Next.js 14 (App Router)**
+- **TypeScript**
+- **Tailwind CSS**
+- **Lucide Icons**
+- **shadcn/ui**
+- **TanStack Table** (futuramente para exibição de dados em tabelas)
+
+---
+
+## 🖥️ Funcionalidades já implementadas
+
+- Sidebar com navegação principal
+- Layout responsivo
+- Botão flutuante (+) em telas menores para cadastrar nova transação
+- Gráfico de gastos nos últimos 12 meses
+- Tabela com principais gastos do mês e do ano
+- Modal para adicionar categorias e formas de pagamento
+
+---
+
+## 📱 Layout Responsivo
+
+### Versão desktop:
+![alt text](image.png)
+![alt text](image-1.png)
+### Versão mobile:
+![alt text](image-2.png)
+![alt text](image-3.png)
+
+---
+
+## 🧪 Como rodar localmente
+
+1. Clone o repositório:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+git clone https://github.com/jhonux/controle-mais.git
+cd controle-mais

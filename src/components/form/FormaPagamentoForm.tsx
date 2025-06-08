@@ -24,26 +24,15 @@ interface FormaPgtoModalFormProps {
 
 export default function FormaPgtoModalForm({ onSave }: FormaPgtoModalFormProps) {
     const [open, setOpen] = useState(false)
-
-    // Formulário independente para o modal
     const { register, handleSubmit, reset, formState: { errors } } = useForm<FormaPgtoFormValues>()
 
     const onSubmit = (data: FormaPgtoFormValues) => {
         console.log("Forma de pagamento cadastrada:", data)
-
-        // Chama a função onSave passada pelo componente pai
         if (onSave) {
             onSave(data)
         }
-
-        // Reset do formulário do modal e fecha o modal
         reset()
         setOpen(false)
-    }
-
-
-    const handleSave = () => {
-        handleSubmit(onSubmit)()
     }
 
     const handleCancel = () => {
@@ -60,9 +49,7 @@ export default function FormaPgtoModalForm({ onSave }: FormaPgtoModalFormProps) 
                 <DialogHeader>
                     <DialogTitle>Nova Categoria</DialogTitle>
                 </DialogHeader>
-
-                {/* Formulário isolado - não interfere no form principal */}
-                <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+                <div className="space-y-4">
                     <div>
                         <div className="mb-2">
                             <Label htmlFor="payment-name" className="text-right">
@@ -91,9 +78,9 @@ export default function FormaPgtoModalForm({ onSave }: FormaPgtoModalFormProps) 
                         >
                             Cancelar
                         </Button>
-                        <Button onClick={handleSave}>Salvar</Button>
+                        <Button onClick={handleSubmit(onSubmit)}>Salvar</Button>
                     </DialogFooter>
-                </form>
+                </div>
             </DialogContent>
         </Dialog>
     )

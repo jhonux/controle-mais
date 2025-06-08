@@ -1,3 +1,4 @@
+// Arquivo: CategoriaModalForm.tsx (Versão CORRIGIDA)
 'use client'
 
 import { useForm } from "react-hook-form"
@@ -24,26 +25,15 @@ interface CategoriaModalFormProps {
 
 export default function CategoriaModalForm({ onSave }: CategoriaModalFormProps) {
     const [open, setOpen] = useState(false)
-
-    // Formulário independente para o modal
     const { register, handleSubmit, reset, formState: { errors } } = useForm<CategoriaFormValues>()
 
     const onSubmit = (data: CategoriaFormValues) => {
-        console.log("Categoria cadastrada:", data)
-
-        // Chama a função onSave passada pelo componente pai
+        console.log("Categoria salva:", data)
         if (onSave) {
             onSave(data)
         }
-
-        // Reset do formulário do modal e fecha o modal
         reset()
         setOpen(false)
-    }
-
-
-    const handleSave = () => {
-        handleSubmit(onSubmit)()
     }
 
     const handleCancel = () => {
@@ -61,17 +51,13 @@ export default function CategoriaModalForm({ onSave }: CategoriaModalFormProps) 
                     <DialogTitle>Nova Categoria</DialogTitle>
                 </DialogHeader>
 
-                {/* Formulário isolado - não interfere no form principal */}
-                <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+                <div className="space-y-4"> 
                     <div>
-                        <div className="mb-2">
-                            <Label htmlFor="category-name" className="text-right">
-                                Nome
-                            </Label>
-                        </div>
-                        <div>
+                      <div className="mb-2">
+                          <Label htmlFor="category-name">Nome</Label>
+                      </div>
+                      <div>
                         <Input
-                            className="col-span-2 w-full"
                             id="category-name"
                             {...register("nome", { required: "O nome é obrigatório" })}
                             placeholder="Ex: Alimentação, Transporte..."
@@ -79,21 +65,22 @@ export default function CategoriaModalForm({ onSave }: CategoriaModalFormProps) 
                         {errors.nome && (
                             <span className="text-red-500 text-sm">{errors.nome.message}</span>
                         )}
-
-                        </div>
+                      </div>
                     </div>
 
                     <DialogFooter>
                         <Button
                             variant="ghost"
-                            type="button"
+                            type="button" 
                             onClick={handleCancel}
                         >
                             Cancelar
                         </Button>
-                        <Button onClick={handleSave}>Salvar</Button>
+                        <Button type="button" onClick={handleSubmit(onSubmit)}>
+                            Salvar
+                        </Button>
                     </DialogFooter>
-                </form>
+                </div>
             </DialogContent>
         </Dialog>
     )

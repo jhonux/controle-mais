@@ -1,4 +1,4 @@
-import CategoriesList, { Categoria } from "@/components/categories/categoriesList";
+import CategoriesList, { Categoria } from "@/components/categories/CategoriesList";
 
 export default async function Page() {
   const userId = 1;

@@ -57,12 +57,12 @@ const Sidebar = () => {
         </nav>
       </div>
 
-      <div className="px-4 mb-4">
+      {/* <div className="px-4 mb-4">
         <button className="flex items-center gap-2 px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 rounded-lg w-full">
           <LogOut className="w-5 h-5" />
           Sair
         </button>
-      </div>
+      </div> */}
     </aside>
   );
 };

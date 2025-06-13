@@ -1,4 +1,3 @@
-// src/components/dash/CategoryExpenses.tsx
 import React from 'react';
 
 export interface CategoryExpense {

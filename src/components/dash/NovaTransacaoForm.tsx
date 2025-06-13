@@ -10,9 +10,9 @@ import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 
 import { CategorySelect } from '@/components/dash/CategorySelect';
-import  CategoriaModalForm  from '@/components/form/CategoriaModalForm';
+
 import { FormaPagamentoSelect } from '@/components/dash/FormaPagamentoSelect';
-import  FormaPgtoModalForm  from '@/components/form/FormaPagamentoForm';
+// import  FormaPgtoModalForm  from '@/components/form/FormaPagamentoForm';
 
 import { mockCategorias, mockPagamentos } from '@/lib/mock-data';
 import { FormDatePicker } from '@/components/form/form-fields/FormDatePicker';
@@ -100,7 +100,7 @@ export default function NovaTransacaoForm() {
               
               <CategorySelect name="categoria" label='Categoria *' categorias={mockCategorias} />
             </div>
-            <CategoriaModalForm />
+            
           </div>
 
           <div className="flex items-end gap-2">
@@ -111,7 +111,7 @@ export default function NovaTransacaoForm() {
                 formasPagamento={mockPagamentos}
               />
             </div>
-            <FormaPgtoModalForm />
+            {/* <FormaPgtoModalForm /> */}
           </div>
 
           <div>

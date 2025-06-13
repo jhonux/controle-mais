@@ -1,6 +1,6 @@
 'use client'
 
-import { Home, PlusSquare, BarChart2, Tag, CreditCard, LogOut } from "lucide-react";
+import { Home, PlusSquare, Tag, CreditCard } from "lucide-react";
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import clsx from 'clsx';
@@ -12,7 +12,6 @@ const Sidebar = () => {
   const menuItems = [
     { href: '/', label: 'Dashboard', icon: Home },
     { href: '/nova-transacao', label: 'Nova Transação', icon: PlusSquare },
-    { href: '/relatorios', label: 'Relatórios', icon: BarChart2 },
     { href: '/categorias', label: 'Categorias', icon: Tag },
     { href: '/formas-pagamento', label: 'Formas de Pagamento', icon: CreditCard },
   ];

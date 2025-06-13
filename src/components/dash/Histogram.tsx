@@ -1,5 +1,5 @@
-// src/components/dash/Histogram.tsx
-'use client'; // Necessário porque o Recharts requer renderização no lado do cliente
+
+'use client';
 
 import React from 'react';
 import {

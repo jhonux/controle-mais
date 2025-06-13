@@ -9,8 +9,6 @@ import {
   ColumnDef,
   SortingState,
 } from '@tanstack/react-table';
-import { GoTrash } from 'react-icons/go';
-import { HiPencil } from 'react-icons/hi';
 
 import {
   Table,
@@ -35,18 +33,6 @@ interface ExpensesTableProps {
 
 export default function ExpensesTable({ title, data }: ExpensesTableProps) {
   const [sorting, setSorting] = useState<SortingState>([]);
-
-  const handleEdit = (item: Expense) => {
-    console.log('Editar:', item);
-  };
-
-  const handleDelete = (item: Expense) => {
-    console.log('Deletar:', item);
-    if (confirm(`Deseja deletar ${item.description}?`)) {
-      console.log('Item deletado:', item);
-      // aqui você pode adicionar a lógica para excluir de fato
-    }
-  };
 
   const columns: ColumnDef<Expense>[] = [
     {
@@ -83,28 +69,6 @@ export default function ExpensesTable({ title, data }: ExpensesTableProps) {
       accessorKey: 'description',
       header: 'Descrição',
       cell: info => info.getValue(),
-    },
-    {
-      id: 'actions',
-      header: 'Ações',
-      cell: ({ row }) => (
-        <div className="flex space-x-2">
-          <button
-            className="text-blue-500 hover:text-blue-700 focus:outline-none"
-            onClick={() => handleEdit(row.original)}
-            aria-label="Editar"
-          >
-            <HiPencil size={16} />
-          </button>
-          <button
-            className="text-red-700 hover:text-red-900 focus:outline-none"
-            onClick={() => handleDelete(row.original)}
-            aria-label="Deletar"
-          >
-            <GoTrash size={16} />
-          </button>
-        </div>
-      ),
     },
   ];
 
@@ -151,7 +115,7 @@ export default function ExpensesTable({ title, data }: ExpensesTableProps) {
           <TableBody>
             {table.getRowModel().rows.length === 0 && (
               <TableRow>
-                <TableCell colSpan={5} className="text-center py-4">
+                <TableCell colSpan={4} className="text-center py-4">
                   Nenhum dado encontrado.
                 </TableCell>
               </TableRow>

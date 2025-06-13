@@ -1,4 +1,5 @@
 import CategoriesList, { Categoria } from "@/components/categories/CategoriesList";
+import  CategoriaModalForm  from '@/components/form/CategoriaModalForm';
 
 export default async function Page() {
   const userId = 1;
@@ -21,5 +22,6 @@ export default async function Page() {
     throw new Error("Formato de resposta inválido");
   }
 
+  <CategoriaModalForm />
   return <CategoriesList initialItems={items} />;
 }

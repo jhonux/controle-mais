@@ -1,27 +1,31 @@
-import CategoriesList, { Categoria } from "@/components/categories/CategoriesList";
-import  CategoriaModalForm  from '@/components/form/CategoriaModalForm';
+// app/categorias/page.tsx
 
-export default async function Page() {
-  const userId = 1;
-  const url = `https://apex.oracle.com/pls/apex/controleplus/controle/categoria?P_ID_USUARIO=${userId}`;
+import { getCategories } from '@/lib/data';
+import CategoriesTable from '@/components/dash/CategoryTable'; 
+import CategoriaModalForm from '@/components/form/CategoriaModalForm';
 
-  const res = await fetch(url, {
-    cache: "no-store",
-    headers: { Accept: "application/json" },
-  });
+export default async function PaginaCategorias() {
+  const userId = '1';
+  const categories = await getCategories(userId);
 
-  if (!res.ok) throw new Error(`Falha ao carregar categorias: ${res.status}`);
-  const raw = await res.json();
+  return (
+    <div className="p-4 sm:p-6 md:p-8 space-y-6">
+      <header className="flex justify-between items-center">
+        <div>
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-800">
+            Categorias
+          </h1>
+          <p className="text-sm text-gray-500 mt-1">
+            Gerencie suas categorias de despesas e receitas.
+          </p>
+        </div>
+        <CategoriaModalForm />
+        {/* Futuramente, um botão para adicionar nova categoria pode vir aqui */}
+      </header>
 
-  let items: Categoria[];
-  if (Array.isArray(raw)) {
-    items = raw;
-  } else if (raw && Array.isArray((raw as any).items)) {
-    items = (raw as any).items;
-  } else {
-    throw new Error("Formato de resposta inválido");
-  }
-
-  <CategoriaModalForm />
-  return <CategoriesList initialItems={items} />;
+      <main>
+        <CategoriesTable data={categories} />
+      </main>
+    </div>
+  );
 }

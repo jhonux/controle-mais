@@ -5,6 +5,7 @@ import CategoryExpenses from "@/components/dash/CategoryExpenses";
 import Link from "next/link";
 import { Plus, TrendingUp, TrendingDown, Wallet } from "lucide-react";
 
+
 interface Transaction {
   id_transacao:    number;
   descricao:       string;
@@ -145,6 +146,10 @@ export default async function DashPage() {
         <div>
           <h1 className="text-2xl font-bold">Dashboard</h1>
           <p className="text-gray-600">Visão geral das suas finanças</p>
+        </div>
+        <div>
+          
+
         </div>
         <Link href="/nova-transacao">
           <button className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 hidden md:block">

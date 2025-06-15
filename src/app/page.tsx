@@ -5,33 +5,17 @@ import CategoryExpenses from "@/components/dash/CategoryExpenses";
 import Link from "next/link";
 import { Plus, TrendingUp, TrendingDown, Wallet } from "lucide-react";
 
-
+// Suas interfaces continuam as mesmas
 interface Transaction {
-  id_transacao:    number;
-  descricao:       string;
-  valor?:          number;
-  data?:           string;
-  tipo_transacao:  string;
-  categoria:       string;
-  forma_pagamento: string;
+  id_transacao:     number;
+  descricao:        string;
+  valor?:           number;
+  data?:            string;
+  tipo_transacao:   string;
+  categoria:        string;
+  forma_pagamento:  string;
 }
-
-interface TopExpense {
-    categoria: string;
-    valor?: number;
-    data?: string;
-    descricao: string;
-}
-
-interface CategoryExpense {
-    categoria: string;
-    total_ano?: number;
-}
-
-interface MonthlyBalance {
-    mes_ano: string;
-    saldo_mensal: number;
-}
+// ... resto das interfaces
 
 export const metadata = {
   title: 'Controle Financeiro',
@@ -40,104 +24,107 @@ export const metadata = {
 
 export default async function DashPage() {
   const userId = 1;
+  // As URLs e a busca de dados continuam iguais
   const transactionsUrl = `https://apex.oracle.com/pls/apex/controleplus/controle/transacao?P_ID_USUARIO=${userId}`;
   const top5ExpensesUrl = `https://apex.oracle.com/pls/apex/controleplus/controle/view-gastos-mes-atual-top-5?P_ID_USUARIO=${userId}`;
   const categoryExpensesUrl = `https://apex.oracle.com/pls/apex/controleplus/controle/view-gastos-ano-categoria?P_ID_USUARIO=${userId}`;
   const monthlyBalanceUrl = `https://apex.oracle.com/pls/apex/controleplus/controle/view-projecao-financeira-12-meses?P_ID_USUARIO=${userId}`;
+  const recentTransactionsUrl = `https://apex.oracle.com/pls/apex/controleplus/controle/view-ultimas-transacoes-top-5?P_ID_USUARIO=${userId}`;
 
   const [
     transactionsRes, 
     top5ExpensesRes, 
     categoryExpensesRes,
-    monthlyBalanceRes
+    monthlyBalanceRes,
+    recentTransactionsRes
   ] = await Promise.all([
     fetch(transactionsUrl, { cache: "no-store", headers: { Accept: "application/json" } }),
     fetch(top5ExpensesUrl, { cache: "no-store", headers: { Accept: "application/json" } }),
     fetch(categoryExpensesUrl, { cache: "no-store", headers: { Accept: "application/json" } }),
     fetch(monthlyBalanceUrl, { cache: "no-store", headers: { Accept: "application/json" } }),
+    fetch(recentTransactionsUrl, { cache: "no-store", headers: { Accept: "application/json" } }),
   ]);
 
   if (!transactionsRes.ok) throw new Error("Erro ao carregar transações");
   if (!top5ExpensesRes.ok) throw new Error("Erro ao carregar top 5 gastos do mês");
   if (!categoryExpensesRes.ok) throw new Error("Erro ao carregar gastos por categoria");
   if (!monthlyBalanceRes.ok) throw new Error("Erro ao carregar projeção financeira");
+  if (!recentTransactionsRes.ok) throw new Error("Erro ao carregar últimas transações");
 
   const [
     transactionsRaw, 
     top5ExpensesRaw, 
     categoryExpensesRaw,
-    monthlyBalanceRaw
+    monthlyBalanceRaw,
+    recentTransactionsRaw
   ] = await Promise.all([
     transactionsRes.json(),
     top5ExpensesRes.json(),
     categoryExpensesRes.json(),
-    monthlyBalanceRes.json()
+    monthlyBalanceRes.json(),
+    recentTransactionsRes.json()
   ]);
 
-  console.log("DADOS DA API DE GASTOS POR CATEGORIA:", categoryExpensesRaw);
+  // A extração dos dados continua igual
+  const transactions: Transaction[] = transactionsRaw?.items || (Array.isArray(transactionsRaw) ? transactionsRaw : []);
+  const top5ExpensesData: TopExpense[] = top5ExpensesRaw?.items || (Array.isArray(top5ExpensesRaw) ? top5ExpensesRaw : []);
+  const categoryExpensesData: CategoryExpense[] = categoryExpensesRaw?.items || (Array.isArray(categoryExpensesRaw) ? categoryExpensesRaw : []);
+  const monthlyBalanceData: MonthlyBalance[] = monthlyBalanceRaw?.items || (Array.isArray(monthlyBalanceRaw) ? monthlyBalanceRaw : []);
+  const recentTransactionsData: Transaction[] = recentTransactionsRaw?.items || (Array.isArray(recentTransactionsRaw) ? recentTransactionsRaw : []);
 
-  let transactions: Transaction[] = [];
-  if (Array.isArray(transactionsRaw)) { transactions = transactionsRaw; } 
-  else if (transactionsRaw?.items) { transactions = transactionsRaw.items; }
-
-  let top5ExpensesData: TopExpense[] = [];
-  if (Array.isArray(top5ExpensesRaw)) { top5ExpensesData = top5ExpensesRaw; }
-  else if (top5ExpensesRaw?.items) { top5ExpensesData = top5ExpensesRaw.items; }
+  // <<< MUDANÇA PRINCIPAL: Criamos um formatador de moeda único
+  const currencyFormatter = new Intl.NumberFormat('pt-BR', {
+    style: 'currency',
+    currency: 'BRL',
+    signDisplay: 'auto', // 'auto' é o padrão, não mostra '+' para positivos
+  });
   
-  let categoryExpensesData: CategoryExpense[] = [];
-  if (Array.isArray(categoryExpensesRaw)) { categoryExpensesData = categoryExpensesRaw; }
-  else if (categoryExpensesRaw?.items) { categoryExpensesData = categoryExpensesRaw.items; }
-
-  let monthlyBalanceData: MonthlyBalance[] = [];
-  if (Array.isArray(monthlyBalanceRaw)) { monthlyBalanceData = monthlyBalanceRaw; }
-  else if (monthlyBalanceRaw?.items) { monthlyBalanceData = monthlyBalanceRaw.items; }
-  
-  const recent = transactions.slice(0, 5).map((t) => {
-    const isDespesa = t.tipo_transacao.toLowerCase() === "saida";
-    return {
-      category:    t.categoria,
-      value:       `${isDespesa ? "- " : "+ "}R$ ${((t.valor ?? 0)).toFixed(2)}`,
-      date:        (t.data ?? '').substring(0, 10).split("-").reverse().join("/"),
-      description: t.descricao,
-    };
+  // Formatador opcional se você AINDA QUISER o sinal de '+'
+  const currencyFormatterWithPlusSign = new Intl.NumberFormat('pt-BR', {
+    style: 'currency',
+    currency: 'BRL',
+    signDisplay: 'exceptZero', 
   });
 
-  const monthlyExpenses = top5ExpensesData.map(t => {
-    return {
-        category:    t.categoria,
-        value:       `- R$ ${((t.valor ?? 0)).toFixed(2)}`,
-        date:        (t.data ?? '').substring(0, 10).split("-").reverse().join("/"),
-        description: t.descricao,
-    }
-  });
-
-  const catExpenses = categoryExpensesData.map(c => ({
-    category: c.categoria,
-    value: `R$ ${((c.total_ano ?? 0)).toFixed(2)}`,
+  // <<< MUDANÇA AQUI: Simplificamos o mapeamento
+  const recent = recentTransactionsData.map((t) => ({
+    category:    t.categoria,
+    value:       currencyFormatterWithPlusSign.format(t.valor ?? 0), // Usamos o formatador
+    date:        (t.data ?? '').substring(0, 10).split("-").reverse().join("/"),
+    description: t.descricao,
   }));
 
-  const histogramData = monthlyBalanceData.map(item => {
-    const monthName = item.mes_ano.trim().split(/\s+/)[0];
-    const expenseValue = Math.abs(item.saldo_mensal ?? 0); 
-    return { 
-      month: monthName.substring(0, 3),
-      gastos: expenseValue 
-    };
-  });
+  // <<< MUDANÇA AQUI: Simplificamos o mapeamento
+  const monthlyExpenses = top5ExpensesData.map(t => ({
+    category:    t.categoria,
+    value:       currencyFormatter.format(t.valor ?? 0), // Usamos o formatador
+    date:        (t.data ?? '').substring(0, 10).split("-").reverse().join("/"),
+    description: t.descricao,
+  }));
 
+  // <<< MUDANÇA AQUI: Simplificamos o mapeamento
+  const catExpenses = categoryExpensesData.map(c => ({
+    category: c.categoria,
+    value: currencyFormatter.format(c.total_ano ?? 0), // Usamos o formatador
+  }));
+
+  const histogramData = monthlyBalanceData.map(item => ({
+    month: item.mes_ano.trim().split(/\s+/)[0].substring(0, 3),
+    gastos: Math.abs(item.saldo_mensal ?? 0),
+  }));
+
+  // A lógica de cálculo do resumo continua a mesma
   const now = new Date();
   const curMon = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}`;
-
   let sumReceitas = 0, sumDespesas = 0;
   transactions.forEach((t) => {
-    if (!t.data.startsWith(curMon)) return;
+    if (!t.data?.startsWith(curMon)) return;
     if (t.tipo_transacao.toLowerCase() === "entrada") {
       sumReceitas += (t.valor ?? 0);
     } else {
       sumDespesas += (t.valor ?? 0);
     }
   });
-
   const saldoAtual = sumReceitas - sumDespesas;
 
   return (
@@ -147,10 +134,6 @@ export default async function DashPage() {
           <h1 className="text-2xl font-bold">Dashboard</h1>
           <p className="text-gray-600">Visão geral das suas finanças</p>
         </div>
-        <div>
-          
-
-        </div>
         <Link href="/nova-transacao">
           <button className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 hidden md:block">
             Nova Transação
@@ -158,10 +141,11 @@ export default async function DashPage() {
         </Link>
       </div>
 
+      {/* <<< MUDANÇA AQUI: Usamos o formatador nos cards para consistência */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-        <SummaryCard title="Receitas do Mês" value={`R$ ${sumReceitas.toFixed(2)}`} trend={`+ R$ ${(sumReceitas - sumDespesas).toFixed(2)}`} icon={<TrendingUp size={24} color="#039e00" />} />
-        <SummaryCard title="Gastos do Mês" value={`R$ ${sumDespesas.toFixed(2)}`} trend={`- R$ ${(sumDespesas - sumReceitas).toFixed(2)}`} icon={<TrendingDown size={24} color="#d90202" />} />
-        <SummaryCard title="Saldo Atual" value={`R$ ${saldoAtual.toFixed(2)}`} icon={<Wallet size={24} color="#004cff" />} />
+        <SummaryCard title="Receitas do Mês" value={currencyFormatter.format(sumReceitas)} trend={currencyFormatterWithPlusSign.format(sumReceitas - sumDespesas)} icon={<TrendingUp size={24} color="#039e00" />} />
+        <SummaryCard title="Gastos do Mês" value={currencyFormatter.format(Math.abs(sumDespesas))} trend={currencyFormatter.format(sumDespesas - sumReceitas)} icon={<TrendingDown size={24} color="#d90202" />} />
+        <SummaryCard title="Saldo Atual" value={currencyFormatter.format(saldoAtual)} icon={<Wallet size={24} color="#004cff" />} />
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">

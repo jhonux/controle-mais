@@ -15,7 +15,21 @@ interface Transaction {
   categoria:        string;
   forma_pagamento:  string;
 }
-// ... resto das interfaces
+interface TopExpense {
+  categoria: string;
+  valor?: number;
+  data?: string;
+  descricao: string;
+}
+interface CategoryExpense {
+  categoria: string;
+  total_ano?: number;
+}
+interface MonthlyBalance {
+  mes_ano: string;
+  saldo_mensal?: number;
+}
+
 
 export const metadata = {
   title: 'Controle Financeiro',
@@ -24,7 +38,7 @@ export const metadata = {
 
 export default async function DashPage() {
   const userId = 1;
-  // As URLs e a busca de dados continuam iguais
+
   const transactionsUrl = `https://apex.oracle.com/pls/apex/controleplus/controle/transacao?P_ID_USUARIO=${userId}`;
   const top5ExpensesUrl = `https://apex.oracle.com/pls/apex/controleplus/controle/view-gastos-mes-atual-top-5?P_ID_USUARIO=${userId}`;
   const categoryExpensesUrl = `https://apex.oracle.com/pls/apex/controleplus/controle/view-gastos-ano-categoria?P_ID_USUARIO=${userId}`;
@@ -65,47 +79,46 @@ export default async function DashPage() {
     recentTransactionsRes.json()
   ]);
 
-  // A extração dos dados continua igual
+
   const transactions: Transaction[] = transactionsRaw?.items || (Array.isArray(transactionsRaw) ? transactionsRaw : []);
   const top5ExpensesData: TopExpense[] = top5ExpensesRaw?.items || (Array.isArray(top5ExpensesRaw) ? top5ExpensesRaw : []);
   const categoryExpensesData: CategoryExpense[] = categoryExpensesRaw?.items || (Array.isArray(categoryExpensesRaw) ? categoryExpensesRaw : []);
   const monthlyBalanceData: MonthlyBalance[] = monthlyBalanceRaw?.items || (Array.isArray(monthlyBalanceRaw) ? monthlyBalanceRaw : []);
   const recentTransactionsData: Transaction[] = recentTransactionsRaw?.items || (Array.isArray(recentTransactionsRaw) ? recentTransactionsRaw : []);
 
-  // <<< MUDANÇA PRINCIPAL: Criamos um formatador de moeda único
+
   const currencyFormatter = new Intl.NumberFormat('pt-BR', {
     style: 'currency',
     currency: 'BRL',
-    signDisplay: 'auto', // 'auto' é o padrão, não mostra '+' para positivos
+    signDisplay: 'auto', 
   });
   
-  // Formatador opcional se você AINDA QUISER o sinal de '+'
   const currencyFormatterWithPlusSign = new Intl.NumberFormat('pt-BR', {
     style: 'currency',
     currency: 'BRL',
     signDisplay: 'exceptZero', 
   });
 
-  // <<< MUDANÇA AQUI: Simplificamos o mapeamento
+ 
   const recent = recentTransactionsData.map((t) => ({
     category:    t.categoria,
-    value:       currencyFormatterWithPlusSign.format(t.valor ?? 0), // Usamos o formatador
+    value:       currencyFormatterWithPlusSign.format(t.valor ?? 0), 
     date:        (t.data ?? '').substring(0, 10).split("-").reverse().join("/"),
     description: t.descricao,
   }));
 
-  // <<< MUDANÇA AQUI: Simplificamos o mapeamento
+ 
   const monthlyExpenses = top5ExpensesData.map(t => ({
     category:    t.categoria,
-    value:       currencyFormatter.format(t.valor ?? 0), // Usamos o formatador
+    value:       currencyFormatter.format(t.valor ?? 0), 
     date:        (t.data ?? '').substring(0, 10).split("-").reverse().join("/"),
     description: t.descricao,
   }));
 
-  // <<< MUDANÇA AQUI: Simplificamos o mapeamento
+
   const catExpenses = categoryExpensesData.map(c => ({
     category: c.categoria,
-    value: currencyFormatter.format(c.total_ano ?? 0), // Usamos o formatador
+    value: currencyFormatter.format(c.total_ano ?? 0), 
   }));
 
   const histogramData = monthlyBalanceData.map(item => ({
@@ -113,7 +126,7 @@ export default async function DashPage() {
     gastos: Math.abs(item.saldo_mensal ?? 0),
   }));
 
-  // A lógica de cálculo do resumo continua a mesma
+
   const now = new Date();
   const curMon = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}`;
   let sumReceitas = 0, sumDespesas = 0;
@@ -141,7 +154,7 @@ export default async function DashPage() {
         </Link>
       </div>
 
-      {/* <<< MUDANÇA AQUI: Usamos o formatador nos cards para consistência */}
+
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
         <SummaryCard title="Receitas do Mês" value={currencyFormatter.format(sumReceitas)} trend={currencyFormatterWithPlusSign.format(sumReceitas - sumDespesas)} icon={<TrendingUp size={24} color="#039e00" />} />
         <SummaryCard title="Gastos do Mês" value={currencyFormatter.format(Math.abs(sumDespesas))} trend={currencyFormatter.format(sumDespesas - sumReceitas)} icon={<TrendingDown size={24} color="#d90202" />} />

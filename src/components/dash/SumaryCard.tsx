@@ -1,15 +1,16 @@
-// Arquivo: SummaryCard.tsx (Versão Melhorada)
+// Arquivo: SummaryCard.tsx (Versão Corrigida)
 import React from 'react';
 
-// 1. A interface agora aceita um 'icon' que pode ser qualquer componente React.
 interface SummaryCardProps {
   title: string;
   value: string;
-  icon: React.ReactNode; // Propriedade para o ícone
+  icon: React.ReactNode;
   trend?: string;
 }
 
 export default function SummaryCard({ title, value, icon }: SummaryCardProps) {
+  const valueColor = value.startsWith('-') ? 'text-red-700' : 'text-green-700';
+
   return (
     <div className="flex flex-col h-full bg-white p-4 rounded-lg shadow-md transition-transform hover:-translate-y-1">
       <div className="flex justify-between items-start">
@@ -18,14 +19,8 @@ export default function SummaryCard({ title, value, icon }: SummaryCardProps) {
           {icon}
         </div>
       </div>
-
       <div className="mt-auto">
-        <p className="text-2xl font-bold mb-4">{value}</p>
-        {/* {trend && (
-          <p className={`text-sm ${trend.startsWith('+') ? 'text-green-500' : 'text-red-500'}`}>
-            {trend}
-          </p>
-        )} */}
+        <p className={`text-2xl font-bold mb-4 ${valueColor}`}>{value}</p>
       </div>
     </div>
   );

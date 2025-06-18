@@ -106,11 +106,11 @@ export default async function DashPage() {
   const monthlyBalanceData: MonthlyBalance[] = monthlyBalanceRaw?.items || (Array.isArray(monthlyBalanceRaw) ? monthlyBalanceRaw : []);
   const recentTransactionsData: Transaction[] = recentTransactionsRaw?.items || (Array.isArray(recentTransactionsRaw) ? recentTransactionsRaw : []);
 
-  // Formatadores de moeda reutilizáveis
+
   const currencyFormatter = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL', signDisplay: 'auto' });
   const currencyFormatterWithPlusSign = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL', signDisplay: 'exceptZero' });
 
-  // Preparação de dados para cada componente do dashboard
+
   const recent = recentTransactionsData.map((t) => ({
     category: t.categoria,
     value: currencyFormatterWithPlusSign.format(t.valor ?? 0),
@@ -151,7 +151,6 @@ export default async function DashPage() {
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
         <SummaryCard title="Receitas do Mês" value={currencyFormatter.format(sumReceitas)} trend={currencyFormatterWithPlusSign.format(saldoAtual)} icon={<TrendingUp size={24} color="#039e00" />} />
-        {/* <<< MUDANÇA AQUI: Math.abs() foi removido >>> */}
         <SummaryCard title="Gastos do Mês" value={currencyFormatter.format(sumDespesas)} trend={currencyFormatter.format(-saldoAtual)} icon={<TrendingDown size={24} color="#d90202" />} />
         <SummaryCard title="Saldo Atual" value={currencyFormatter.format(saldoAtual)} icon={<Wallet size={24} color="#004cff" />} />
       </div>

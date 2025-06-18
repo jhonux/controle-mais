@@ -2,6 +2,7 @@
 import "./globals.css";
 import Image from "next/image";
 import Sidebar from "@/components/sidebar/SideBar";
+import { Toaster } from "sonner";
 
 
 export const metadata = {
@@ -17,7 +18,7 @@ export default function RootLayout({
   return (
     <html lang="pt-BR">
       <body className="flex flex-col min-h-screen">
-
+        <Toaster richColors position="top-right" closeButton />
         <Sidebar />
         <header className="text-white relative py-4 px-4 flex items-center justify-center header-layout ">
           <div className="absolute right-4 inset-y-0 flex items-center">

@@ -19,10 +19,10 @@ export function CategoriaModal({ open, onOpenChange }: CategoriaModalProps) {
         <DialogHeader>
           <DialogTitle>Adicionar Categoria</DialogTitle>
         </DialogHeader>
-        {/* Seu formulário de categoria aqui */}
+
         <div className="mt-2">
           <p>Formulário para adicionar categoria</p>
-          {/* Inputs, botões, etc */}
+
         </div>
         <DialogClose asChild>
           <Button variant="outline" className="mt-6 w-full">

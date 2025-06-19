@@ -15,7 +15,7 @@ import { toast } from 'sonner';
 
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
-import DeleteConfirmationDialog from '@/components/common/DeleteConfirmationDialog'; // Importando o novo componente
+import DeleteConfirmationDialog from '@/components/common/DeleteConfirmationDialog'; 
 import EditCategoryModal from '../form/EditCategoryModal';
 
 interface Categoria {

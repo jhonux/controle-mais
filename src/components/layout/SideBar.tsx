@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 import { Home, PlusSquare, Tag, CreditCard } from "lucide-react";
 import Link from 'next/link';
@@ -17,12 +17,13 @@ const Sidebar = () => {
   ];
 
   return (
-    <aside className="hidden md:flex side-bar h-screen w-64 bg-[#1F2937] text-white flex flex-col justify-between fixed min-h-screen">
+
+    <aside className="hidden md:flex flex-col h-screen w-64 bg-gray-800 text-white border-r border-gray-800 fixed">
       <div>
         <div className="flex items-center gap-2 px-6 py-6">
           <div className=" rounded-lg p-2">
               <Image
-                src="/images/logo.png" // coloque logo.png na pasta /public
+                src="/images/logo.png"
                 alt="Logo"
                 width={50}
                 height={50}
@@ -36,32 +37,29 @@ const Sidebar = () => {
         </div>
 
         <nav className="px-4 mt-4">
-          <p className="text-xs text-gray-400 uppercase mb-3">Menu Principal</p>
-          <ul className="space-y-2">
+          <p className="px-3 py-2 text-xs font-semibold uppercase text-gray-400 tracking-wider">
+            Menu Principal
+          </p>
+          <ul className="space-y-1">
             {menuItems.map(({ href, label, icon: Icon }) => (
               <li key={href}>
                 <Link
                   href={href}
                   className={clsx(
-                    'flex items-center gap-3 px-4 py-2 rounded-lg transition hover:bg-gray-700',
-                    pathname === href && 'bg-gray-700'
+                    'flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium text-gray-300 transition-colors hover:bg-gray-700 hover:text-white',
+                    {
+                      'bg-gray-700 text-white': pathname === href,
+                    }
                   )}
                 >
                   <Icon className="w-5 h-5" />
-                  {label}
+                  <span>{label}</span>
                 </Link>
               </li>
             ))}
           </ul>
         </nav>
       </div>
-
-      {/* <div className="px-4 mb-4">
-        <button className="flex items-center gap-2 px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 rounded-lg w-full">
-          <LogOut className="w-5 h-5" />
-          Sair
-        </button>
-      </div> */}
     </aside>
   );
 };

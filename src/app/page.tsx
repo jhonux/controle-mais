@@ -143,7 +143,7 @@ export default async function DashPage() {
           <p className="text-gray-600">Visão geral das suas finanças</p>
         </div>
         <Link href="/nova-transacao">
-          <button className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 hidden md:block">
+          <button className="bg-gray-800 text-white px-4 py-2 rounded-lg hover:bg-gray-600 hidden md:block">
             Nova Transação
           </button>
         </Link>
@@ -167,7 +167,7 @@ export default async function DashPage() {
 
       <div className="fixed bottom-4 right-4 md:hidden z-50">
         <Link href="/nova-transacao">
-          <button className="bg-blue-600 hover:bg-blue-700 text-white rounded-full p-4 shadow-lg">
+          <button className="bg-gray-800 hover:bg-gray-700 text-white rounded-full p-4 shadow-lg">
             <Plus className="w-6 h-6" />
           </button>
         </Link>

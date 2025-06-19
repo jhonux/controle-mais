@@ -15,9 +15,9 @@ interface Categoria {
 }
 
 interface CategorySelectProps {
-  name: string; // nome do campo no form
-  label: string; // label para o select
-  categorias: Categoria[]; // array de categorias
+  name: string; 
+  label: string; 
+  categorias: Categoria[];
   placeholder?: string;
   required?: boolean;
 }

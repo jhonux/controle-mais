@@ -1,4 +1,4 @@
-// Arquivo: SummaryCard.tsx (Versão Corrigida)
+
 import React from 'react';
 
 interface SummaryCardProps {

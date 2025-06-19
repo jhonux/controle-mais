@@ -1,4 +1,3 @@
-// app/categorias/page.tsx
 
 import { getCategories } from '@/lib/data';
 import CategoriesTable from '@/components/dash/CategoryTable';
@@ -35,7 +34,7 @@ export default async function PaginaCategorias() {
         <CategoriaModalForm>
           <Button
             size="icon"
-            className="h-14 w-14 rounded-full shadow-lg bg-blue-600 hover:bg-blue-700"
+            className="h-14 w-14 rounded-full shadow-lg bg-gray-800 hover:bg-gray-700"
           >
             <Plus className="h-6 w-6" />
             <span className="sr-only">Nova Categoria</span>

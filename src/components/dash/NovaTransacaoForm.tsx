@@ -74,7 +74,7 @@ export default function NovaTransacaoForm() {
      
       <FormProvider {...methods}>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-          {/* 4. Componentes de formulário reutilizáveis e limpos */}
+    
           <FormSelect
             name="tipo"
             label="Tipo *"
@@ -111,7 +111,7 @@ export default function NovaTransacaoForm() {
                 formasPagamento={mockPagamentos}
               />
             </div>
-            {/* <FormaPgtoModalForm /> */}
+
           </div>
 
           <div>

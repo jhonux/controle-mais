@@ -1,31 +1,26 @@
 'use client';
-import React from 'react';
+import React, { useEffect, useState, startTransition } from 'react';
 import { useForm, FormProvider } from 'react-hook-form';
 import { useRouter } from 'next/navigation';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
+import { toast } from 'sonner';
+import { format } from 'date-fns'; // Biblioteca para formatar datas
 
+// Imports de UI e componentes
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
-
-import { CategorySelect } from '@/components/dash/CategorySelect';
-
-import { FormaPagamentoSelect } from '@/components/dash/FormaPagamentoSelect';
-// import  FormaPgtoModalForm  from '@/components/form/FormaPagamentoForm';
-
-import { mockCategorias, mockPagamentos } from '@/lib/mock-data';
+import { Loader2 } from 'lucide-react';
 import { FormDatePicker } from '@/components/form/form-fields/FormDatePicker';
 import { FormInput } from '@/components/form/form-fields/FormInput';
-import { FormSelect } from '@/components/form/form-fields/FormSelect';
-
+import { CategorySelect } from '@/components/dash/CategorySelect';
+import { FormaPagamentoSelect } from '@/components/dash/FormaPagamentoSelect';
+import { TipoTransacaoSelect } from '@/components/dash/TipoTransacaoSelect';
 
 const transactionSchema = z.object({
-  tipo: z.enum(['Receita', 'Despesa'], {
-    required_error: 'O tipo é obrigatório.',
-  }),
-  valor: z
-    .number({ invalid_type_error: 'O valor é obrigatório.' })
+  tipo: z.string().min(1, 'O tipo é obrigatório.'),
+  valor: z.coerce.number({ invalid_type_error: 'O valor é obrigatório.' })
     .positive({ message: 'O valor deve ser maior que zero.' }),
   data: z.date({ required_error: 'A data é obrigatória.' }),
   categoria: z.string().min(1, 'A categoria é obrigatória.'),
@@ -40,9 +35,9 @@ export default function NovaTransacaoForm() {
   
     resolver: zodResolver(transactionSchema),
     defaultValues: {
-      tipo: undefined,
+      tipo: '',
       valor: undefined,
-      data: undefined,
+      data: new Date(),
       categoria: '',
       formaPagamento: '',
       descricao: '',
@@ -52,10 +47,38 @@ export default function NovaTransacaoForm() {
   const { handleSubmit, reset } = methods;
   const router = useRouter();
 
-  const onSubmit = (data: FormData) => {
-   
-    console.log('Form data:', data);
+ const onSubmit = (data: FormData) => {
+    startTransition(async () => {
+      const apiUrl = "https://apex.oracle.com/pls/apex/controleplus/controle/transacao";
 
+      try {
+        const requestBody = {
+          fk_id_usuario: 1, 
+          des_descricao: data.descricao,
+          num_valor: data.valor,
+          fk_id_tipo: parseInt(data.tipo, 10),
+          fk_id_categoria: parseInt(data.categoria, 10),
+          fk_id_forma_pagamento: parseInt(data.formaPagamento, 10),
+          dat_transacao: format(data.data, 'dd-MM-yyyy'), 
+          num_parcelas: 1 
+        };
+
+        const response = await fetch(apiUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(requestBody),
+        });
+
+        if (!response.ok) throw new Error("Falha ao salvar a transação.");
+
+        toast.success("Transação salva com sucesso!");
+        router.push('/');
+        router.refresh();
+
+      } catch (error: any) {
+        toast.error(error.message);
+      }
+    });
   };
 
   const handleCancelClick = () => {
@@ -75,16 +98,7 @@ export default function NovaTransacaoForm() {
       <FormProvider {...methods}>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
     
-          <FormSelect
-            name="tipo"
-            label="Tipo *"
-            placeholder="Selecione o tipo"
-            options={[
-              { value: 'Receita', label: 'Receita' },
-              { value: 'Despesa', label: 'Despesa' },
-            ]}
-          />
-
+          <TipoTransacaoSelect name="tipo" label="Tipo *" />
           <FormInput
             name="valor"
             label="Valor *"
@@ -98,7 +112,7 @@ export default function NovaTransacaoForm() {
           <div className="flex items-end gap-2">
             <div className="flex-1">
               
-              <CategorySelect name="categoria" label='Categoria *' categorias={mockCategorias} />
+              <CategorySelect name="categoria" label='Categoria *' />
             </div>
             
           </div>
@@ -108,7 +122,6 @@ export default function NovaTransacaoForm() {
               <FormaPagamentoSelect
               label='Forma de Pagamento *'
                 name="formaPagamento"
-                formasPagamento={mockPagamentos}
               />
             </div>
 

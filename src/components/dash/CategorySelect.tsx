@@ -1,69 +1,78 @@
-import React from "react";
-import { useFormContext, Controller } from "react-hook-form";
-import {
-  Select,
-  SelectTrigger,
-  SelectValue,
-  SelectContent,
-  SelectItem,
-} from "@/components/ui/select";
-import { Label } from "@/components/ui/label";
+'use client';
 
-interface Categoria {
-  id: string;
-  nome: string;
-}
+import React, { useState, useEffect } from 'react';
+import { useFormContext, Controller } from 'react-hook-form';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Label } from '@/components/ui/label';
 
 interface CategorySelectProps {
-  name: string; 
-  label: string; 
-  categorias: Categoria[];
-  placeholder?: string;
-  required?: boolean;
+  name: string;
+  label: string;
 }
 
-export function CategorySelect({
-  name,
-  label,
-  categorias,
-  placeholder = "Selecione uma categoria",
-  required = false,
-}: CategorySelectProps) {
-  const { control, formState: { errors } } = useFormContext();
+interface CategoriaOption {
+  value: string;
+  label: string;
+}
+
+export function CategorySelect({ name, label }: CategorySelectProps) {
+  const { control, formState: { errors } } = useFormContext(); 
+  const [categorias, setCategorias] = useState<CategoriaOption[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchCategorias = async () => {
+      try {
+        const response = await fetch('/api/categorias'); 
+        if (!response.ok) throw new Error('Falha ao carregar categorias');
+        
+        const data = await response.json();
+        
+        const options = data.map((cat: { id: any; nome: any; }) => ({
+          value: String(cat.id),
+          label: cat.nome,
+        }));
+
+        setCategorias(options);
+      } catch (error) {
+        console.error("Erro no CategorySelect:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchCategorias();
+  }, []); 
+
+  const errorMessage = errors[name]?.message as string | undefined;
 
   return (
-    <div>
-      <Label className="block text-sm font-semibold mb-2 text-gray-700">
-        {label} {required && <span className="text-red-500">*</span>}
-      </Label>
+    <div className="space-y-2">
+      <Label htmlFor={name}>{label}</Label>
+
       <Controller
-        control={control}
         name={name}
-        rules={{ required: required ? "Campo obrigatório" : false }}
+        control={control}
         render={({ field }) => (
-          <Select onValueChange={field.onChange} value={field.value || ""} defaultValue="">
-            <SelectTrigger className="w-full border border-gray-300 rounded-md px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
-              <SelectValue placeholder={placeholder} />
+          <Select
+            onValueChange={field.onChange}
+            defaultValue={field.value}
+            disabled={isLoading}
+          >
+            <SelectTrigger id={name}>
+              <SelectValue placeholder={isLoading ? "Carregando categorias..." : "Selecione uma categoria"} />
             </SelectTrigger>
             <SelectContent>
-              {categorias.length > 0 ? (
-                categorias.map((categoria) => (
-                  <SelectItem key={categoria.id} value={categoria.id}>
-                    {categoria.nome}
-                  </SelectItem>
-                ))
-              ) : (
-                <SelectItem value="" disabled>
-                  Nenhuma categoria disponível
+              {categorias.map(option => (
+                <SelectItem key={option.value} value={option.value}>
+                  {option.label}
                 </SelectItem>
-              )}
+              ))}
             </SelectContent>
           </Select>
         )}
       />
-      {errors[name] && (
-        <p className="text-red-500 text-sm mt-1">{errors[name]?.message?.toString()}</p>
-      )}
+      {errorMessage && <p className="text-sm text-red-500 mt-1">{errorMessage}</p>}
     </div>
   );
 }

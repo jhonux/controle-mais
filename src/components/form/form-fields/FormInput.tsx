@@ -2,11 +2,11 @@ import { useFormContext } from 'react-hook-form';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 
-// Definir a interface FormInputProps, estendendo as propriedades padrão de um <input>
+
 type FormInputProps = {
   name: string;
   label: string;
-} & React.InputHTMLAttributes<HTMLInputElement>; // Substitui InputProps por React.InputHTMLAttributes<HTMLInputElement>
+} & React.InputHTMLAttributes<HTMLInputElement>;
 
 export function FormInput({ name, label, ...props }: FormInputProps) {
   const {

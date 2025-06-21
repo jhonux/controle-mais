@@ -10,10 +10,10 @@ interface FormaPagamentoResponse {
 }
 
 export default async function Page() {
-  // Busca os dados da API de forma de pagamento no servidor (SSR)
+  
   const response = await fetch(
     "https://apex.oracle.com/pls/apex/controleplus/controle/forma_pagamento",
-    { cache: "no-store" }  // cache: 'no-store' para sempre obter dados atualizados (SSR dinâmico)
+    { cache: "no-store" } 
   );
   const data: FormaPagamentoResponse = await response.json();
 

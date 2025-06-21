@@ -86,7 +86,7 @@ export default function ExpensesTable({ title, data }: ExpensesTableProps) {
       <h3 className="text-lg font-semibold mb-4">{title}</h3>
       <p className="text-gray-600 text-sm mb-4">
         {title === 'Principais Gastos do Mês'
-          ? 'Transações mais importantes de dezembro'
+          ? 'Transações mais importantes de Junho'
           : 'Suas transações mais recentes'}
       </p>
 

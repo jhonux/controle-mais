@@ -1,69 +1,75 @@
-import React from "react";
-import { useFormContext, Controller } from "react-hook-form";
-import {
-  Select,
-  SelectTrigger,
-  SelectValue,
-  SelectContent,
-  SelectItem,
-} from "@/components/ui/select";
-import { Label } from "@/components/ui/label";
+'use client';
 
-interface FormaPagamento {
-  id: string;
-  nome: string;
+import React, { useState, useEffect } from 'react';
+import { useFormContext, Controller } from 'react-hook-form';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Label } from '@/components/ui/label';
+
+interface FormaPagamentoOption {
+  value: string;
+  label: string;
 }
 
-interface PgtoSelectProps {
-  name: string; // nome do campo no form
-  label: string; // label para o select
-  formasPagamento: FormaPagamento[]; // array de formas de pagamento
-  placeholder?: string;
-  required?: boolean;
+interface FormaPagamentoSelectProps {
+  name: string;
+  label: string;
 }
 
-export function FormaPagamentoSelect({
-  name,
-  label,
-  formasPagamento,
-  placeholder = "Selecione uma forma de pagamento",
-  required = false,
-}: PgtoSelectProps) {
+export function FormaPagamentoSelect({ name, label }: FormaPagamentoSelectProps) {
   const { control, formState: { errors } } = useFormContext();
+  const [formasPagamento, setFormasPagamento] = useState<FormaPagamentoOption[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchFormasPagamento = async () => {
+      try {
+        const response = await fetch('/api/formas-pagamento');
+        if (!response.ok) throw new Error('Falha ao carregar formas de pagamento');
+        
+        const data = await response.json();
+        const options = data.map((fp: { id: any; nome: any; }) => ({
+          value: String(fp.id),
+          label: fp.nome,
+        }));
+        setFormasPagamento(options);
+      } catch (error) {
+        console.error("Erro no FormaPagamentoSelect:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchFormasPagamento();
+  }, []);
+
+  const errorMessage = errors[name]?.message as string | undefined;
 
   return (
-    <div>
-      <Label className="block text-sm font-semibold mb-2 text-gray-700">
-        {label} {required && <span className="text-red-500">*</span>}
-      </Label>
+    <div className="space-y-2">
+      <Label htmlFor={name}>{label}</Label>
       <Controller
-        control={control}
         name={name}
-        rules={{ required: required ? "Campo obrigatório" : false }}
+        control={control}
         render={({ field }) => (
-          <Select onValueChange={field.onChange} value={field.value || ""} defaultValue="">
-            <SelectTrigger className="w-full border border-gray-300 rounded-md px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition">
-              <SelectValue placeholder={placeholder} />
+          <Select
+            onValueChange={field.onChange}
+            defaultValue={field.value}
+            disabled={isLoading}
+          >
+            <SelectTrigger id={name}>
+              <SelectValue placeholder={isLoading ? "Carregando..." : "Selecione a forma de pagamento"} />
             </SelectTrigger>
             <SelectContent>
-              {formasPagamento.length > 0 ? (
-                formasPagamento.map((forma) => (
-                  <SelectItem key={forma.id} value={forma.id}>
-                    {forma.nome}
-                  </SelectItem>
-                ))
-              ) : (
-                <SelectItem value="" disabled>
-                  Nenhuma forma de pagamento disponível
+              {formasPagamento.map(option => (
+                <SelectItem key={option.value} value={option.value}>
+                  {option.label}
                 </SelectItem>
-              )}
+              ))}
             </SelectContent>
           </Select>
         )}
       />
-      {errors[name] && (
-        <p className="text-red-500 text-sm mt-1">{errors[name]?.message?.toString()}</p>
-      )}
+      {errorMessage && <p className="text-sm text-red-500 mt-1">{errorMessage}</p>}
     </div>
   );
 }

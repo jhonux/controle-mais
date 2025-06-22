@@ -2,20 +2,20 @@
 
 import { useState, useTransition } from 'react';
 import { useRouter } from 'next/navigation';
-import { 
-  useReactTable, 
-  getCoreRowModel, 
-  getSortedRowModel, 
-  flexRender, 
-  ColumnDef, 
-  SortingState, 
+import {
+  useReactTable,
+  getCoreRowModel,
+  getSortedRowModel,
+  flexRender,
+  ColumnDef,
+  SortingState,
 } from '@tanstack/react-table';
 import { Pencil, Trash2, Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
 
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
-import DeleteConfirmationDialog from '@/components/common/DeleteConfirmationDialog'; 
+import DeleteConfirmationDialog from '@/components/common/DeleteConfirmationDialog';
 import EditCategoryModal from '../form/EditCategoryModal';
 
 interface Categoria {
@@ -64,11 +64,11 @@ export default function CategoriesTable({ data }: CategoryTableProps) {
     },
     {
       id: 'actions',
-      header: 'Ações',
+      header: () => <div className="text-right">Ações</div>,
       cell: ({ row }) => {
         const categoria = row.original;
         return (
-          <div className="space-x-2">
+          <div className="flex justify-end space-x-2">
             <EditCategoryModal category={categoria}>
               <Button variant="outline" size="icon">
                 <Pencil className="h-4 w-4" style={{ color: '#0837c4' }} />
@@ -124,7 +124,10 @@ export default function CategoriesTable({ data }: CategoryTableProps) {
               table.getRowModel().rows.map(row => (
                 <TableRow key={row.id}>
                   {row.getVisibleCells().map(cell => (
-                    <TableCell key={cell.id}>
+                    <TableCell
+                      key={cell.id}
+                      className={cell.column.id === 'actions' ? 'text-right' : ''}
+                    >
                       {flexRender(cell.column.columnDef.cell, cell.getContext())}
                     </TableCell>
                   ))}
@@ -132,7 +135,7 @@ export default function CategoriesTable({ data }: CategoryTableProps) {
               ))
             ) : (
               <TableRow>
-                <TableCell colSpan={columns.length} className="text-center h-24">
+                <TableCell colSpan={columns.length} className="text-end h-24">
                   Nenhuma categoria encontrada.
                 </TableCell>
               </TableRow>
